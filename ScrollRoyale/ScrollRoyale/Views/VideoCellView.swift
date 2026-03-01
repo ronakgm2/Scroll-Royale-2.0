@@ -11,6 +11,7 @@ struct VideoCellView: View {
 
     var body: some View {
         ZStack {
+            // MARK: Video player + full-cell vignette
             VideoPlayerView(
                 url: item.videoURL,
                 isPlaying: isActive,
@@ -26,35 +27,50 @@ struct VideoCellView: View {
                 )
             )
 
+            // MARK: Overlay chips
+            // Padding values are calibrated to clear the top utility bar + player strip
+            // and the bottom score HUD when the stage is positioned inside GameView.
             VStack {
                 HStack {
-                    Text("VIDEO \(index + 1) / \(totalCount)")
-                        .font(.system(size: 10, weight: .black, design: .rounded))
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 5)
-                        .background(Color.black.opacity(0.46))
-                        .clipShape(Capsule())
-                        .overlay(Capsule().stroke(Color.black, lineWidth: 2))
+                    videoIndexChip
                     Spacer()
                 }
                 .padding(.top, 96)
                 .padding(.horizontal, 14)
+
                 Spacer()
+
                 if isActive {
-                    Text("SWIPE TO NEXT CLIP")
-                        .font(.system(size: 10, weight: .black, design: .rounded))
-                        .foregroundStyle(.white.opacity(0.86))
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 6)
-                        .background(Color.black.opacity(0.44))
-                        .clipShape(Capsule())
-                        .overlay(Capsule().stroke(Color.black, lineWidth: 2))
+                    swipeHintChip
                         .padding(.bottom, 134)
                 }
             }
         }
         .frame(height: cellHeight)
+    }
+
+    // MARK: – "VIDEO X / N" chip (top-left, always visible)
+    private var videoIndexChip: some View {
+        Text("VIDEO \(index + 1) / \(totalCount)")
+            .font(.system(size: 10, weight: .black, design: .rounded))
+            .foregroundStyle(ArcadeTheme.textPrimary)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 5)
+            .background(Color.black.opacity(0.46))
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(ArcadeTheme.outline, lineWidth: 2))
+    }
+
+    // MARK: – "SWIPE TO NEXT CLIP" chip (bottom-center, active reel only)
+    private var swipeHintChip: some View {
+        Text("SWIPE TO NEXT CLIP")
+            .font(.system(size: 10, weight: .black, design: .rounded))
+            .foregroundStyle(ArcadeTheme.textPrimary.opacity(0.86))
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.black.opacity(0.44))
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(ArcadeTheme.outline, lineWidth: 2))
     }
 }
 
